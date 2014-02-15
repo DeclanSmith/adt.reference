@@ -7,3 +7,4 @@
 
 # Eclipse settings #
 .settings/*
+/bin

@@ -4,18 +4,23 @@ import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
 /**
- * Single linked list
+ * Double linked list
  * 
  * @author markus.korbel@lyit.ie
+ * 
  * @param <T>
  *            The data type for the linked list data elements
- * 
  */
-public class SingleLinkedList<T> {
+public class DoubleLinkedList<T> {
 	/**
 	 * The first node in the list (or NULL if the list is empty)
 	 */
 	private Node<T> first;
+
+	/**
+	 * The last node in the list (or NULL if the list is empty)
+	 */
+	private Node<T> last;
 
 	/**
 	 * Retrieves the first data element in the list (like Peek in stack)
@@ -32,6 +37,20 @@ public class SingleLinkedList<T> {
 	}
 
 	/**
+	 * Retrieves the last data element in the list (like Peek in stack)
+	 * 
+	 * @return The last data element
+	 * @throws NoSuchElementException
+	 *             If the list is empty
+	 */
+	public T getLast() throws NoSuchElementException {
+		if (last == null) {
+			throw new NoSuchElementException();
+		}
+		return last.data;
+	}
+
+	/**
 	 * Adds a data element at the beginning of the list (moving existing
 	 * elements back) (like Push in stack)
 	 * 
@@ -42,8 +61,39 @@ public class SingleLinkedList<T> {
 		Node<T> newNode = new Node<T>();
 		newNode.data = data;
 		newNode.next = first;
+		newNode.previous = null;
+
+		if (first != null) {
+			first.previous = newNode;
+		}
 
 		first = newNode;
+		if (last == null) {
+			last = newNode;
+		}
+	}
+
+	/**
+	 * Adds a data element at the end of the list (leaving existing element
+	 * untouched)
+	 * 
+	 * @param data
+	 *            The data element to store
+	 */
+	public void addLast(T data) {
+		Node<T> newNode = new Node<T>();
+		newNode.data = data;
+		newNode.next = null;
+		newNode.previous = last;
+
+		if (last != null) {
+			last.next = newNode;
+		}
+
+		last = newNode;
+		if (first == null) {
+			first = newNode;
+		}
 	}
 
 	/**
@@ -58,9 +108,38 @@ public class SingleLinkedList<T> {
 		if (first == null) {
 			throw new NoSuchElementException();
 		}
-		
+
 		T data = first.data;
+		if (first.next != null) {
+			first.next.previous = null;
+		}
 		first = first.next;
+		if (first == null) {
+			last = null;
+		}
+		return data;
+	}
+
+	/**
+	 * Removes and returns the last data element in the list
+	 * 
+	 * @return The data element retrieved before removing it
+	 * @throws NoSuchElementException
+	 *             If the list is empty
+	 */
+	public T removeLast() throws NoSuchElementException {
+		if (last == null) {
+			throw new NoSuchElementException();
+		}
+
+		T data = last.data;
+		if (last.previous != null) {
+			last.previous.next = null;
+		}
+		last = last.previous;
+		if (last == null) {
+			first = null;
+		}
 		return data;
 	}
 
@@ -74,26 +153,25 @@ public class SingleLinkedList<T> {
 			Node<T> currentFirst = first;
 			first = first.next;
 
-			// Insert it into the new list and "rewire"
+			// Once update the last pointer
+			if (newFirst == null) {
+				last = currentFirst;
+			}
+
+			// Insert into new list and "rewire"
 			currentFirst.next = newFirst;
 			newFirst = currentFirst;
+			newFirst.previous = null;
+			if (newFirst.next != null) {
+				newFirst.next.previous = newFirst;
+			}
 		}
 
 		first = newFirst;
 	}
 
 	/**
-	 * Creates and returns a new list iterator for this list
-	 * 
-	 * @return The newly generated iterator
-	 */
-	public ListIterator<T> listIterator() {
-		return new LinkedListIterator<T>();
-	}
-
-	/**
-	 * Single linked list iterator (all double linked methods throw
-	 * UnsupportedOperationException)
+	 * Double linked list iterator
 	 * 
 	 * @author markus.korbel@lyit.ie
 	 * @param <U>
@@ -102,19 +180,21 @@ public class SingleLinkedList<T> {
 	 */
 	private class LinkedListIterator<U> implements ListIterator<T> {
 		/**
-		 * The index of the next element returned
+		 * The index of the next element returned (subtract 1 for previous
+		 * index)
 		 */
 		private int nextIndex = 0;
 
 		/**
-		 * Our current iterator position
+		 * The current iterator position
 		 */
 		private Node<T> position = null;
 
 		/**
-		 * The previously visited position (for remove)
+		 * Was the last operation a call to next()? If not remove() is
+		 * forbidden!
 		 */
-		private Node<T> previous = null;
+		private boolean wasLastCallNext = false;
 
 		/**
 		 * Moves past the next element in the list
@@ -129,7 +209,7 @@ public class SingleLinkedList<T> {
 				throw new NoSuchElementException();
 			}
 
-			previous = position; // Remember for remove
+			wasLastCallNext = true;
 			if (position == null) {
 				position = first;
 			} else {
@@ -164,18 +244,23 @@ public class SingleLinkedList<T> {
 		 */
 		@Override
 		public void remove() throws IllegalStateException {
-			if (previous == position) {
+			if (!this.wasLastCallNext) {
 				throw new IllegalStateException();
 			}
 
 			if (position == first) {
 				removeFirst();
+			} else if (position == last) {
+				removeLast();
 			} else {
-				previous.next = position.next;
+				// Remove in the middle
+				position.previous.next = position.next;
+				position.next.previous = position.previous;
 			}
 
-			position = previous;
+			position = position.previous;
 			this.nextIndex--;
+			this.wasLastCallNext = false;
 		}
 
 		/**
@@ -202,19 +287,26 @@ public class SingleLinkedList<T> {
 		 */
 		@Override
 		public void add(T data) {
+			this.wasLastCallNext = false;
+
 			if (position == null) {
 				addFirst(data);
 				position = first;
+			} else if (!hasNext()) {
+				addLast(data);
+				position = last;
 			} else {
+				// Add in the middle
 				Node<T> newNode = new Node<T>();
 				newNode.data = data;
 
 				newNode.next = position.next;
+				newNode.previous = position;
+				position.next.previous = newNode;
 				position.next = newNode;
 				position = newNode;
 			}
 
-			previous = position;
 			this.nextIndex++;
 		}
 
@@ -233,43 +325,67 @@ public class SingleLinkedList<T> {
 		}
 
 		/**
-		 * Not supported
+		 * Checks if there is another element in the list before us (is it save
+		 * to call previous()?)
 		 * 
-		 * @return Exception
+		 * @return True if there is another element in the list before us, false
+		 *         if we have reached the beginning (or are still there)
 		 */
 		@Override
 		public boolean hasPrevious() {
-			// Single linked list, this isn't supported
-			throw new UnsupportedOperationException();
+			return position != null;
 		}
 
 		/**
-		 * Not supported
+		 * Moves back one element in the list
 		 * 
-		 * @return Exception
+		 * @return The data element just passed backwards
+		 * @throws NoSuchElementException
+		 *             If the iterator is at the beginning of the list
 		 */
 		@Override
 		public T previous() {
-			// Single linked list, this isn't supported
-			throw new UnsupportedOperationException();
+			if (!hasPrevious()) {
+				throw new NoSuchElementException();
+			}
+
+			this.wasLastCallNext = false;
+			T data = position.data;
+			position = position.previous;
+
+			this.nextIndex--;
+			return data;
 		}
 
 		/**
-		 * Not supported
-		 * 
-		 * @return Exception
+		 * Returns the index of the element we just passed (when moving
+		 * forwards), or the next in line (if moving backwards), or -1 if we are
+		 * at the beginning of the list
 		 */
 		@Override
 		public int previousIndex() {
-			// Single linked list, this isn't supported
-			throw new UnsupportedOperationException();
+			if (position == null) {
+				return -1;
+			}
+
+			return this.nextIndex - 1;
 		}
 	}
 
 	/**
-	 * Single linked list node
+	 * Creates and returns a new list iterator for this list
+	 * 
+	 * @return The newly generated iterator
+	 */
+	public ListIterator<T> listIterator() {
+		return new LinkedListIterator<T>();
+	}
+
+	/**
+	 * Double linked list node
 	 * 
 	 * @author markus.korbel@lyit.ie
+	 * 
 	 * @param <V>
 	 *            The data type of the stored element (same as T in parent
 	 *            class, passed down)
@@ -284,6 +400,10 @@ public class SingleLinkedList<T> {
 		 * The next node in the list (or NULL if we are the last node)
 		 */
 		public Node<V> next;
-	}
 
+		/**
+		 * The previous node in the list (or NULL if we are the first node)
+		 */
+		public Node<V> previous;
+	}
 }

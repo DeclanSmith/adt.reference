@@ -20,7 +20,7 @@ public class SingleLinkedListTests {
 	 * Add/get/remove first tests
 	 */
 	@Test
-	public void addGetRemoveFirstTest() {
+	public void addGetRemoveFirstTests() {
 		SingleLinkedList<String> list = new SingleLinkedList<String>();
 		list.addFirst("markus");
 		assertEquals("markus", list.getFirst());
@@ -39,6 +39,7 @@ public class SingleLinkedListTests {
 		list.addFirst("markus");
 		list.addFirst("grace");
 		list.addFirst("eliza");
+		
 		assertEquals("eliza", list.getFirst());
 		list.reverse();
 		assertEquals("markus", list.getFirst());
