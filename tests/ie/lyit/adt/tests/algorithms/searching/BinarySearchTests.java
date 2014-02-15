@@ -1,6 +1,7 @@
 package ie.lyit.adt.tests.algorithms.searching;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import ie.lyit.adt.algorithms.searching.BinarySearch;
 import ie.lyit.adt.tools.RandomArray;
 
@@ -29,6 +30,16 @@ public class BinarySearchTests {
 		assertEquals(randomIndex, BinarySearch.binaryIntSearch(randomArray,
 				randomArray[randomIndex]));
 	}
+	
+	/**
+	 * Tests if the search algorithm correctly handles items not found
+	 */
+	@Test
+	public void notFoundTest() {
+		int[] numbers = new int[] { 1, 2, 3 };
+		assertEquals(0, BinarySearch.binaryIntSearch(numbers, 1));
+		assertEquals(-1, BinarySearch.binaryIntSearch(numbers, 4));
+	}
 
 	/**
 	 * Tries to demonstrate the log2(n) efficiency
@@ -42,7 +53,18 @@ public class BinarySearchTests {
 			int[] randomArray = RandomArray.randomIntArray(1000, true, false);
 			int randomIndex = random.nextInt(1000);
 			assertEquals(randomIndex, BinarySearch.binaryIntSearch(randomArray,
-					randomArray[randomIndex], 0, randomArray.length, true));
+					randomArray[randomIndex], 0, randomArray.length));
+			assertTrue(BinarySearch.lastRunComparisons <= 10);
 		}
+	}
+	
+	/**
+	 * Default constructor test
+	 */
+	@Test
+	public void defaultConstructorTest() {
+		// Static tool class still has default constructor (to get 100% coverage
+		// we need to test it too)
+		new BinarySearch();
 	}
 }

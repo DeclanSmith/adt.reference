@@ -17,11 +17,9 @@ import org.junit.Test;
 public class LinearSearchTests {
 	/**
 	 * Tests the basic functionality of the linear search algorithm
-	 * 
-	 * @throws Exception
 	 */
 	@Test
-	public void basicTest() throws Exception {
+	public void basicTest() {
 		Random random = new Random();
 		int[] randomArray = RandomArray.randomIntArray(1000, false, false);
 		int randomIndex = random.nextInt(1000);
@@ -30,12 +28,20 @@ public class LinearSearchTests {
 	}
 
 	/**
-	 * Tests if the average efficiency of the linear search is n/2
-	 * 
-	 * @throws Exception
+	 * Tests if the search algorithm correctly handles items not found
 	 */
 	@Test
-	public void trendingTest() throws Exception {
+	public void notFoundTest() {
+		int[] numbers = new int[] { 1, 2, 3 };
+		assertEquals(0, LinearSearch.linearIntSearch(numbers, 1));
+		assertEquals(-1, LinearSearch.linearIntSearch(numbers, 4));
+	}
+
+	/**
+	 * Tests if the average efficiency of the linear search is n/2
+	 */
+	@Test
+	public void trendingTest() {
 		int totalComparisons = 0;
 		Random random = new Random();
 
@@ -48,8 +54,16 @@ public class LinearSearchTests {
 			assertEquals(randomIndex, searchIndex);
 		}
 
-		System.out.println("Average comparison count was: " + totalComparisons
-				/ 50000.0);
 		assertEquals(25.0, totalComparisons / 50000.0, 2.5);
+	}
+
+	/**
+	 * Default constructor test
+	 */
+	@Test
+	public void defaultConstructorTest() {
+		// Static tool class still has default constructor (to get 100% coverage
+		// we need to test it too)
+		new LinearSearch();
 	}
 }
