@@ -5,14 +5,16 @@ import java.util.NoSuchElementException;
 /**
  * Generic stack data structure
  * 
- * @author markus.korbel
+ * @author markus.korbel@lyit.ie
+ * @param <T>
+ *            The data type for stack elements
  */
 public class Stack<T> {
 	/**
 	 * Our internal data array
 	 */
 	private T[] stackArray;
-	
+
 	/**
 	 * Our current top of the stack pointer
 	 */
@@ -20,8 +22,10 @@ public class Stack<T> {
 
 	/**
 	 * Default constructor (stack maximum size 5)
+	 * 
+	 * @throws IllegalArgumentException
 	 */
-	public Stack() throws Exception {
+	public Stack() throws IllegalArgumentException {
 		// Just passing the default value on to our other constructor
 		// Should never throw Exception, but declared just in case
 		this(5);
@@ -32,14 +36,15 @@ public class Stack<T> {
 	 * 
 	 * @param maxSize
 	 *            The maximum size of the new stack
-	 *            @throws Exception If the maximum stack size is invalid
+	 * @throws IllegalArgumentException
+	 *             If the maximum stack size is invalid
 	 */
 	@SuppressWarnings("unchecked")
-	public Stack(int maxSize) throws Exception {
-		if(maxSize<=0){
-			throw new Exception("Invalid stack size!");
+	public Stack(int maxSize) throws IllegalArgumentException {
+		if (maxSize < 1) {
+			throw new IllegalArgumentException("Invalid stack size!");
 		}
-		
+
 		this.stackArray = (T[]) new Object[maxSize];
 	}
 
@@ -48,12 +53,12 @@ public class Stack<T> {
 	 * 
 	 * @param value
 	 *            The element to push
-	 * @throws Exception
+	 * @throws IllegalStateException
 	 *             If the stack is already full
 	 */
-	public void push(T value) throws Exception {
+	public void push(T value) throws IllegalStateException {
 		if (this.isFull()) {
-			throw new Exception("Stack already full!");
+			throw new IllegalStateException("Stack already full!");
 		}
 
 		this.stackArray[++this.top] = value;
@@ -121,9 +126,9 @@ public class Stack<T> {
 	public String toString() {
 		String formatted = "Stack [";
 		if (this.isEmpty()) {
-			return formatted +"]";
+			return formatted + "]";
 		}
-		
+
 		for (int i = 0; i <= this.top; i++)
 			formatted += this.stackArray[i] + ", ";
 		formatted = formatted.substring(0, formatted.length() - 2);

@@ -3,11 +3,19 @@ package ie.lyit.adt.datastructures;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
-public class LinkedList {
+/**
+ * Single linked list
+ * 
+ * @author markus.korbel@lyit.ie
+ * @param <T>
+ *            The data type for the linked list data elements
+ * 
+ */
+public class SingleLinkedList<T> {
 	/**
 	 * The first node in the list (or NULL if the list is empty)
 	 */
-	private Node first;
+	private Node<T> first;
 
 	/**
 	 * Retrieves the first data element in the list (like Peek in stack)
@@ -16,7 +24,7 @@ public class LinkedList {
 	 * @throws NoSuchElementException
 	 *             If the list is empty
 	 */
-	public Object getFirst() throws NoSuchElementException {
+	public T getFirst() throws NoSuchElementException {
 		if (first == null) {
 			throw new NoSuchElementException();
 		}
@@ -30,8 +38,8 @@ public class LinkedList {
 	 * @param data
 	 *            The data element to store
 	 */
-	public void addFirst(Object data) {
-		Node newNode = new Node();
+	public void addFirst(T data) {
+		Node<T> newNode = new Node<T>();
 		newNode.data = data;
 		newNode.next = first;
 
@@ -46,11 +54,11 @@ public class LinkedList {
 	 * @throws NoSuchElementException
 	 *             If the list is empty
 	 */
-	public Object removeFirst() throws NoSuchElementException {
+	public T removeFirst() throws NoSuchElementException {
 		if (first == null) {
 			throw new NoSuchElementException();
 		}
-		Object obj = first.data;
+		T obj = first.data;
 
 		first = first.next;
 		return obj;
@@ -60,15 +68,15 @@ public class LinkedList {
 	 * Reverses the list
 	 */
 	public void reverse() {
-		Node newFirst = null;
+		Node<T> newFirst = null;
 		while (first != null) {
-			Node currentFirst = first;
+			Node<T> currentFirst = first;
 			first = first.next;
-			
+
 			currentFirst.next = newFirst;
 			newFirst = currentFirst;
 		}
-		
+
 		first = newFirst;
 	}
 
@@ -77,28 +85,34 @@ public class LinkedList {
 	 * 
 	 * @return The newly generated iterator
 	 */
-	@SuppressWarnings("rawtypes")
-	public ListIterator listIterator() {
-		return new LinkedListIterator();
+	public ListIterator<T> listIterator() {
+		return new LinkedListIterator<T>();
 	}
 
 	/**
-	 * Linked list iterator
+	 * Single linked list iterator (all double linked methods throw
+	 * UnsupportedOperationException)
 	 * 
 	 * @author markus.korbel@lyit.ie
-	 * 
+	 * @param <U>
+	 *            The data type for the linked list data elements (same as T in
+	 *            parent class, just passed down in listIterator() method)
 	 */
-	@SuppressWarnings("rawtypes")
-	private class LinkedListIterator implements ListIterator {
+	private class LinkedListIterator<U> implements ListIterator<T> {
+		/**
+		 * The index of the next element returned
+		 */
+		private int nextIndex = 0;
+
 		/**
 		 * Our current iterator position
 		 */
-		private Node position;
+		private Node<T> position = null;
 
 		/**
 		 * The previously visited position (for remove)
 		 */
-		private Node previous;
+		private Node<T> previous = null;
 
 		/**
 		 * Moves past the next element in the list
@@ -108,7 +122,7 @@ public class LinkedList {
 		 *             If the iterator is at the end of the list
 		 */
 		@Override
-		public Object next() throws NoSuchElementException {
+		public T next() throws NoSuchElementException {
 			if (!hasNext()) {
 				throw new NoSuchElementException();
 			}
@@ -120,6 +134,7 @@ public class LinkedList {
 				position = position.next;
 			}
 
+			this.nextIndex++;
 			return position.data;
 		}
 
@@ -150,6 +165,7 @@ public class LinkedList {
 			if (previous == position) {
 				throw new IllegalStateException();
 			}
+
 			if (position == first) {
 				removeFirst();
 			} else {
@@ -157,6 +173,7 @@ public class LinkedList {
 			}
 
 			position = previous;
+			this.nextIndex--;
 		}
 
 		/**
@@ -167,10 +184,11 @@ public class LinkedList {
 		 *             first or after the last element
 		 */
 		@Override
-		public void set(Object obj) throws NoSuchElementException {
+		public void set(T obj) throws NoSuchElementException {
 			if (position == null) {
 				throw new NoSuchElementException();
 			}
+
 			position.data = obj;
 		}
 
@@ -181,63 +199,89 @@ public class LinkedList {
 		 * is empty)
 		 */
 		@Override
-		public void add(Object obj) {
+		public void add(T obj) {
 			if (position == null) {
 				addFirst(obj);
 				position = first;
 			} else {
-				Node newNode = new Node();
+				Node<T> newNode = new Node<T>();
 				newNode.data = obj;
 
 				newNode.next = position.next;
 				position.next = newNode;
 				position = newNode;
 			}
+
 			previous = position;
+			this.nextIndex++;
 		}
 
+		/**
+		 * Returns the index of the element that would be returned by a
+		 * subsequent call to next(). (Returns list size if the list iterator is
+		 * at the end of the list.)
+		 * 
+		 * @return The index of the element that would be returned by a
+		 *         subsequent call to next, or list size if the list iterator is
+		 *         at the end of the list
+		 */
+		@Override
+		public int nextIndex() {
+			return this.nextIndex;
+		}
+
+		/**
+		 * Not supported
+		 * 
+		 * @return Exception
+		 */
 		@Override
 		public boolean hasPrevious() {
 			// Single linked list, this isn't supported
-			return false;
+			throw new UnsupportedOperationException();
 		}
 
+		/**
+		 * Not supported
+		 * 
+		 * @return Exception
+		 */
 		@Override
-		public int nextIndex() {
-			// We don't count index positions (you can if you want, add it to
-			// the next() method)
-			return -1;
-		}
-
-		@Override
-		public Object previous() {
+		public T previous() {
 			// Single linked list, this isn't supported
-			return null;
+			throw new UnsupportedOperationException();
 		}
 
+		/**
+		 * Not supported
+		 * 
+		 * @return Exception
+		 */
 		@Override
 		public int previousIndex() {
 			// Single linked list, this isn't supported
-			return -1;
+			throw new UnsupportedOperationException();
 		}
 	}
 
 	/**
-	 * Linked list node
+	 * Single linked list node
 	 * 
 	 * @author markus.korbel@lyit.ie
-	 * 
+	 * @param <V>
+	 *            The data type of the stored element (same as T in parent
+	 *            class, passed down)
 	 */
-	private class Node {
+	private class Node<V> {
 		/**
 		 * The data contained in the node
 		 */
-		public Object data;
+		public V data;
 
 		/**
 		 * The next node in the list (or NULL if we are the last node)
 		 */
-		public Node next;
+		public Node<V> next;
 	}
 
 }

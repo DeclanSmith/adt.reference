@@ -5,7 +5,9 @@ import java.util.NoSuchElementException;
 /**
  * Queue data structure for Strings
  * 
- * @author markus.korbel
+ * @author markus.korbel@lyit.ie
+ * @param <T>
+ *            The data type for the queue elements
  * 
  */
 public class Queue<T> {
@@ -26,8 +28,10 @@ public class Queue<T> {
 
 	/**
 	 * Default constructor (queue maximum size 5)
+	 * 
+	 * @throws IllegalArgumentException
 	 */
-	public Queue() throws Exception {
+	public Queue() throws IllegalArgumentException {
 		// Just passing the default value on to our other constructor
 		// Should never throw Exception, but declared just in case
 		this(5);
@@ -38,18 +42,19 @@ public class Queue<T> {
 	 * 
 	 * @param maxQueueSize
 	 *            The maximum size of the queue
-	 * @throws Exception
+	 * @throws IllegalArgumentException
 	 *             If the maximum queue size is invalid
 	 */
 	@SuppressWarnings("unchecked")
-	public Queue(int maxQueueSize) throws Exception {
-		if (maxQueueSize <= 0) {
-			throw new Exception("Invalid max queue size!");
+	public Queue(int maxQueueSize) throws IllegalArgumentException {
+		if (maxQueueSize < 1) {
+			throw new IllegalArgumentException("Invalid max queue size!");
 		}
 
-		// This implementation needs to "waste" a position in the array to differentiate
+		// This implementation needs to "waste" a position in the array to
+		// differentiate
 		// between empty and full
-		this.queueArray = (T[])new Object[maxQueueSize + 1];
+		this.queueArray = (T[]) new Object[maxQueueSize + 1];
 	}
 
 	/**
@@ -57,12 +62,12 @@ public class Queue<T> {
 	 * 
 	 * @param value
 	 *            The value to add
-	 * @throws Exception
+	 * @throws IllegalStateException
 	 *             If the queue is already full
 	 */
-	public void Append(T value) throws Exception {
+	public void Append(T value) throws IllegalStateException {
 		if (this.isFull()) {
-			throw new Exception("Sorry, queue is full!");
+			throw new IllegalStateException("Sorry, queue is full!");
 		}
 
 		rear = (rear + 1) % this.queueArray.length;
@@ -76,13 +81,13 @@ public class Queue<T> {
 	 * @throws NoSuchElementException
 	 *             If there is no element in the queue
 	 */
-	public T Remove() throws Exception {
+	public T Remove() throws NoSuchElementException {
 		if (this.isEmpty()) {
 			throw new NoSuchElementException("No elements left in the queue!");
 		}
 
 		T value = this.queueArray[this.front];
-		this.front = (this.front + 1) % 6;
+		this.front = (this.front + 1) % this.queueArray.length;
 		return value;
 	}
 
@@ -93,7 +98,7 @@ public class Queue<T> {
 	 * @throws NoSuchElementException
 	 *             If there is no element in the queue
 	 */
-	public T Peek() {
+	public T Peek() throws NoSuchElementException {
 		if (this.isEmpty()) {
 			throw new NoSuchElementException("No elements left in the queue!");
 		}
@@ -124,7 +129,7 @@ public class Queue<T> {
 	 * 
 	 * @return True/False indicating whether the queue is empty
 	 */
-	private boolean isEmpty() {
+	public boolean isEmpty() {
 		return front == (rear + 1) % this.queueArray.length;
 	}
 
@@ -133,7 +138,7 @@ public class Queue<T> {
 	 * 
 	 * @return True/False indicating whether the queue is full
 	 */
-	private boolean isFull() {
+	public boolean isFull() {
 		return front == (rear + 2) % this.queueArray.length;
 	}
 
@@ -142,16 +147,16 @@ public class Queue<T> {
 	 */
 	@Override
 	public String toString() {
-		String formatted = "Queue[";
-		if(this.isEmpty()) {
+		String formatted = "Queue [";
+		if (this.isEmpty()) {
 			return formatted + "]";
 		}
-		
+
 		for (int i = this.front; i < (this.front + this.Size()); i++) {
 			formatted += this.queueArray[i % this.queueArray.length] + ", ";
 		}
 
 		formatted = formatted.substring(0, formatted.length() - 2);
-		return formatted + "] " + this.Size();
+		return formatted + "]";
 	}
 }

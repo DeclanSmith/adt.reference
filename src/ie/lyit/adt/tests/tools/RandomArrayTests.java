@@ -18,17 +18,12 @@ import org.junit.Test;
 public class RandomArrayTests {
 	/**
 	 * Tests the random integer array creation
-	 * 
-	 * @throws Exception
 	 */
 	@Test
-	public void testRandomIntArray() throws Exception {
+	public void testRandomIntArray() {
 		// Basic tests (prints out generated elements)
 		int[] basic = RandomArray.randomIntArray(10, false, true);
 		assertTrue(basic.length == 10);
-		for (int element : basic) {
-			System.out.println(element);
-		}
 
 		// Checks if sorting parameter works
 		int[] sorted = RandomArray.randomIntArray(10, true, false);
@@ -44,15 +39,93 @@ public class RandomArrayTests {
 		for (int element : noDuplicates) {
 			assertTrue(duplicatesCheck.add(element));
 		}
+
+		// Test sorted but with duplicates
+		int[] sortedNoDuplicates = RandomArray.randomIntArray(1000, true, true);
+		currentMax = Integer.MIN_VALUE;
+		for (int element : sortedNoDuplicates) {
+			assertTrue(element > currentMax || element == Integer.MIN_VALUE);
+			currentMax = element;
+		}
 	}
 
 	/**
-	 * Checks if the empty array size exception get's thrown
-	 * 
-	 * @throws Exception
+	 * Tests the random string array creation
 	 */
-	@Test(expected = Exception.class)
-	public void invalidSizeTest() throws Exception {
+	@Test
+	public void testRandomStringArray() {
+		// Basic tests (prints out generated elements)
+		String[] basic = RandomArray.randomStringArray(10, 10, false, true);
+		assertTrue(basic.length == 10);
+		assertTrue(basic[0].length() == 10);
+
+		// Demonstrate string sorting (works on ASCII chars?)
+		assertTrue("a".compareTo("b") < 0);
+		assertTrue("A".compareTo("a") < 0);
+		assertTrue("a".compareTo("A") > 0);
+		assertTrue("a".compareTo("0") > 0);
+		assertTrue("A".compareTo("0") > 0);
+		assertTrue("0".compareTo("a") < 0);
+
+		// Checks if sorting parameter works
+		String[] sorted = RandomArray.randomStringArray(10, 3, true, false);
+		String currentMax = "000";
+		for (String element : sorted) {
+			assertTrue(element.compareTo(currentMax) > 0
+					|| element.equals("000"));
+			currentMax = element;
+		}
+
+		// Checks if noDuplicates parameter works
+		String[] noDuplicates = RandomArray.randomStringArray(1000, 4, false,
+				false);
+		Set<String> duplicatesCheck = new LinkedHashSet<String>();
+		for (String element : noDuplicates) {
+			assertTrue(duplicatesCheck.add(element));
+		}
+
+		// Test sorted but with duplicates
+		String[] sortedNoDuplicates = RandomArray.randomStringArray(1000, 4,
+				true, true);
+		currentMax = "000";
+		for (String element : sortedNoDuplicates) {
+			assertTrue(element.compareTo(currentMax) > 0
+					|| element.equals("000"));
+			currentMax = element;
+		}
+	}
+
+	/**
+	 * Checks if the empty integer array size exception get's thrown
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void invalidIntSizeTest() {
 		RandomArray.randomIntArray(0, false, false);
+	}
+
+	/**
+	 * Checks if the empty string array size exception get's thrown
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void invalidStringSizeTest() {
+		RandomArray.randomStringArray(0, 10, false, false);
+	}
+
+	/**
+	 * Checks if the 0 string length exception get's thrown
+	 */
+	@Test(expected = IllegalArgumentException.class)
+	public void invalidStringLengthTest() {
+		RandomArray.randomStringArray(10, 0, false, false);
+	}
+
+	/**
+	 * Default constructor test
+	 */
+	@Test
+	public void defaultConstructorTest() {
+		// Static tool class still has default constructor (to get 100% coverage
+		// we need to test it too)
+		new RandomArray();
 	}
 }
