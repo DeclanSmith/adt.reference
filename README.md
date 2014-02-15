@@ -7,6 +7,7 @@ markus.korbel@lyit.ie
 * Stack
 * Queue
 * SingleLinkedList
+* DoubleLinkedList
 	
 ### Algorithms
 * LinearSearch
