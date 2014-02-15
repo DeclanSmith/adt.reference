@@ -19,7 +19,7 @@ public class LinearSearchTests {
 	 * Tests the basic functionality of the linear search algorithm
 	 */
 	@Test
-	public void basicTest() {
+	public void basicIntTest() {
 		Random random = new Random();
 		int[] randomArray = RandomArray.randomIntArray(1000, false, false);
 		int randomIndex = random.nextInt(1000);
@@ -31,10 +31,33 @@ public class LinearSearchTests {
 	 * Tests if the search algorithm correctly handles items not found
 	 */
 	@Test
-	public void notFoundTest() {
+	public void intNotFoundTest() {
 		int[] numbers = new int[] { 1, 2, 3 };
 		assertEquals(0, LinearSearch.linearIntSearch(numbers, 1));
 		assertEquals(-1, LinearSearch.linearIntSearch(numbers, 4));
+	}
+
+	/**
+	 * Tests the basic functionality of the linear search algorithm
+	 */
+	@Test
+	public void basicStringTest() {
+		Random random = new Random();
+		String[] randomArray = RandomArray.randomStringArray(1000, 10, false,
+				false);
+		int randomIndex = random.nextInt(1000);
+		assertEquals(randomIndex, LinearSearch.linearStringSearch(randomArray,
+				randomArray[randomIndex]));
+	}
+
+	/**
+	 * Tests if the search algorithm correctly handles items not found
+	 */
+	@Test
+	public void stringNotFoundTest() {
+		String[] strings = new String[] { "a", "b", "c" };
+		assertEquals(1, LinearSearch.linearStringSearch(strings, "b"));
+		assertEquals(-1, LinearSearch.linearStringSearch(strings, "d"));
 	}
 
 	/**

@@ -23,22 +23,47 @@ public class BinarySearchTests {
 	 * @throws Exception
 	 */
 	@Test
-	public void basicTest() throws Exception {
+	public void basicIntTest() throws Exception {
 		Random random = new Random();
 		int[] randomArray = RandomArray.randomIntArray(1000, true, false);
 		int randomIndex = random.nextInt(1000);
 		assertEquals(randomIndex, BinarySearch.binaryIntSearch(randomArray,
 				randomArray[randomIndex]));
 	}
-	
+
 	/**
 	 * Tests if the search algorithm correctly handles items not found
 	 */
 	@Test
-	public void notFoundTest() {
+	public void intNotFoundTest() {
 		int[] numbers = new int[] { 1, 2, 3 };
 		assertEquals(0, BinarySearch.binaryIntSearch(numbers, 1));
 		assertEquals(-1, BinarySearch.binaryIntSearch(numbers, 4));
+	}
+
+	/**
+	 * Tests the basic functionality of the binary search algorithm
+	 * 
+	 * @throws Exception
+	 */
+	@Test
+	public void basicStringTest() throws Exception {
+		Random random = new Random();
+		String[] randomArray = RandomArray.randomStringArray(1000, 10, true,
+				false);
+		int randomIndex = random.nextInt(1000);
+		assertEquals(randomIndex, BinarySearch.binaryStringSearch(randomArray,
+				randomArray[randomIndex]));
+	}
+
+	/**
+	 * Tests if the search algorithm correctly handles items not found
+	 */
+	@Test
+	public void stringNotFoundTest() {
+		String[] strings = new String[] { "a", "b", "c" };
+		assertEquals(1, BinarySearch.binaryStringSearch(strings, "b"));
+		assertEquals(-1, BinarySearch.binaryStringSearch(strings, "d"));
 	}
 
 	/**
@@ -57,7 +82,7 @@ public class BinarySearchTests {
 			assertTrue(BinarySearch.lastRunComparisons <= 10);
 		}
 	}
-	
+
 	/**
 	 * Default constructor test
 	 */
