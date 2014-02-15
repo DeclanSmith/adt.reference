@@ -6,7 +6,7 @@ markus.korbel@lyit.ie
 ### Datastructures
 * Stack
 * Queue
-* LinkedList
+* SingleLinkedList
 	
 ### Algorithms
 * LinearSearch
@@ -14,3 +14,4 @@ markus.korbel@lyit.ie
 	
 ### Tools
 * RandomArray
+* RandomString
