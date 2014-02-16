@@ -61,6 +61,40 @@ public class LinearSearchTests {
 	}
 
 	/**
+	 * Tests the basic functionality of the linear search algorithm
+	 */
+	@Test
+	public void basicGenericTest() {
+		Random random = new Random();
+		Student[] students = new Student[1000];
+		int[] randomStudentIDs = RandomArray.randomIntArray(1000, false, false);
+		String[] randomPasswords = RandomArray.randomStringArray(1000, 8,
+				false, true);
+		for (int i = 0; i < 1000; i++) {
+			students[i] = new Student(randomStudentIDs[i], randomPasswords[i]);
+		}
+
+		int randomIndex = random.nextInt(1000);
+		int searchResult = LinearSearch.linearSearch(students,
+				students[randomIndex]);
+		assertEquals(randomIndex, searchResult);
+	}
+
+	/**
+	 * Tests if the search algorithm correctly handles items not found
+	 */
+	@Test
+	public void genericNotFoundTest() {
+		Student[] students = new Student[] { new Student(1, "test"),
+				new Student(99, "random") };
+		assertEquals(1, LinearSearch.linearSearch(students, new Student(99,
+				"doesn't matter")));
+		assertEquals(-1,
+				LinearSearch.linearSearch(students, new Student(2, "xxx")));
+		assertEquals(-1, LinearSearch.linearSearch(students, "test"));
+	}
+
+	/**
 	 * Tests if the average efficiency of the linear search is n/2
 	 */
 	@Test

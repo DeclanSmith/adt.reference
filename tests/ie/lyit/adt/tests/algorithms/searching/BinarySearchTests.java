@@ -67,6 +67,39 @@ public class BinarySearchTests {
 	}
 
 	/**
+	 * Tests the basic functionality of the binary search algorithm
+	 */
+	@Test
+	public void basicGenericTest() {
+		Random random = new Random();
+		Student[] students = new Student[1000];
+		int[] randomStudentIDs = RandomArray.randomIntArray(1000, true, false);
+		String[] randomPasswords = RandomArray.randomStringArray(1000, 8,
+				false, true);
+		for (int i = 0; i < 1000; i++) {
+			students[i] = new Student(randomStudentIDs[i], randomPasswords[i]);
+		}
+
+		int randomIndex = random.nextInt(1000);
+		int searchResult = BinarySearch.binarySearch(students,
+				students[randomIndex]);
+		assertEquals(randomIndex, searchResult);
+	}
+
+	/**
+	 * Tests if the search algorithm correctly handles items not found
+	 */
+	@Test
+	public void genericNotFoundTest() {
+		Student[] students = new Student[] { new Student(1, "test"),
+				new Student(99, "random") };
+		assertEquals(1, BinarySearch.binarySearch(students, new Student(99,
+				"doesn't matter")));
+		assertEquals(-1,
+				BinarySearch.binarySearch(students, new Student(2, "xxx")));
+	}
+
+	/**
 	 * Tries to demonstrate the log2(n) efficiency
 	 * 
 	 * @throws Exception
@@ -92,4 +125,5 @@ public class BinarySearchTests {
 		// we need to test it too)
 		new BinarySearch();
 	}
+
 }

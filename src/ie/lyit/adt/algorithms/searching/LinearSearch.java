@@ -44,4 +44,25 @@ public class LinearSearch {
 
 		return -1;
 	}
+
+	/**
+	 * Linear search inside a generic array
+	 * 
+	 * @param T
+	 *            The data type of the array elements
+	 * @param array
+	 *            The array to search
+	 * @param searchFor
+	 *            The item to search for
+	 * @return The index of the item if found, -1 otherwise
+	 */
+	public static <T> int linearSearch(T[] array, T searchFor) {
+		for (int i = 0; i < array.length; i++) {
+			if (array[i].equals(searchFor)) {
+				return i;
+			}
+		}
+
+		return -1;
+	}
 }

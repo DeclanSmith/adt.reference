@@ -1,5 +1,7 @@
 package ie.lyit.adt.datastructures;
 
+import ie.lyit.adt.algorithms.searching.BinarySearch;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -30,6 +32,9 @@ public class HashTable<T extends Serializable & Comparable<T>, U> {
 	 */
 	private int md5ByteCount;
 
+	/**
+	 * Our instance of the MD5 algorithm
+	 */
 	private MessageDigest md5;
 
 	/**
@@ -112,14 +117,8 @@ public class HashTable<T extends Serializable & Comparable<T>, U> {
 	public boolean contains(T key) throws IOException {
 		byte[] md5Hash = this.md5.digest(this.keyToByteArray(key));
 		int md5Index = this.getMD5IndexPosition(md5Hash);
-
-		for (int i = 0; i < this.hashTable[md5Index].length; i++) {
-			if (this.hashTable[md5Index][i].key.equals(key)) {
-				return true;
-			}
-		}
-
-		return false;
+		return BinarySearch.binarySearch(this.hashTable[md5Index],
+				new HashTableEntry(key, null)) >= 0;
 	}
 
 	/**
@@ -134,18 +133,45 @@ public class HashTable<T extends Serializable & Comparable<T>, U> {
 	 *             Serializable!)
 	 */
 	public U get(T key) throws IOException {
+		byte[] md5Hash = this.md5.digest(this.keyToByteArray(key));
+		int md5Index = this.getMD5IndexPosition(md5Hash);
+		int itemIndex = BinarySearch.binarySearch(this.hashTable[md5Index],
+				new HashTableEntry(key, null));
+
+		if (itemIndex >= 0) {
+			return this.hashTable[md5Index][itemIndex].value;
+		}
+
+		return null;
+	}
+
+	/**
+	 * Removes the value stored using the specified key
+	 * 
+	 * @param key
+	 *            The key to remove
+	 * @throws IOException
+	 *             If the key cannot be converted to a byte array (implement
+	 *             Serializable!)
+	 */
+	@SuppressWarnings("unchecked")
+	public void remove(T key) throws IOException {
 		if (this.contains(key)) {
 			byte[] md5Hash = this.md5.digest(this.keyToByteArray(key));
 			int md5Index = this.getMD5IndexPosition(md5Hash);
 
+			HashTableEntry[] shrunk = (HashTableEntry[]) Array.newInstance(
+					HashTableEntry.class, this.hashTable[md5Index].length - 1);
+			int shrunkIndex = 0;
 			for (int i = 0; i < this.hashTable[md5Index].length; i++) {
-				if (this.hashTable[md5Index][i].key.equals(key)) {
-					return this.hashTable[md5Index][i].value;
+				if (!this.hashTable[md5Index][i].key.equals(key)) {
+					shrunk[shrunkIndex++] = this.hashTable[md5Index][i];
 				}
 			}
-		}
 
-		return null;
+			Arrays.sort(shrunk);
+			this.hashTable[md5Index] = shrunk;
+		}
 	}
 
 	/**
@@ -154,6 +180,8 @@ public class HashTable<T extends Serializable & Comparable<T>, U> {
 	 * @param key
 	 *            The key to convert
 	 * @return The byte representation of the key
+	 * @throws IOException
+	 *             If the key can't be converted to a byte array
 	 */
 	private byte[] keyToByteArray(T key) throws IOException {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -173,7 +201,8 @@ public class HashTable<T extends Serializable & Comparable<T>, U> {
 	private int getMD5IndexPosition(byte[] md5Hash) {
 		int index = 0;
 		for (int i = 0; i < this.md5ByteCount; i++) {
-			// Don't forget that java bytes are signed! +128 to have only positive values
+			// Don't forget that java bytes are signed! +128 to have only
+			// positive values
 			index = index * 256 + ((int) md5Hash[i] + 128);
 		}
 
@@ -186,7 +215,8 @@ public class HashTable<T extends Serializable & Comparable<T>, U> {
 	 * @author markus.korbel@lyit.ie
 	 * 
 	 */
-	private class HashTableEntry implements Comparable<T>, Serializable {
+	private class HashTableEntry implements Comparable<HashTableEntry>,
+			Serializable {
 		/**
 		 * Serializable version UID
 		 */
@@ -215,10 +245,21 @@ public class HashTable<T extends Serializable & Comparable<T>, U> {
 			this.value = value;
 		}
 
+		/**
+		 * Compares ourselves to another object for equality
+		 */
 		@SuppressWarnings("unchecked")
 		@Override
-		public int compareTo(T other) {
-			return this.key.compareTo(((HashTableEntry) other).key);
+		public boolean equals(Object obj) {
+			return this.key.equals(((HashTable<T, U>.HashTableEntry) obj).key);
+		}
+
+		/**
+		 * Compares this hash table entry to another using the key
+		 */
+		@Override
+		public int compareTo(HashTableEntry other) {
+			return this.key.compareTo(other.key);
 		}
 	}
 }

@@ -1,6 +1,7 @@
 package ie.lyit.adt.tests.datastructures;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -32,17 +33,27 @@ public class HashTableTests {
 			NoSuchAlgorithmException, IOException {
 		HashTable<Integer, String> hashTable = new HashTable<Integer, String>(1);
 
+		// Add item and check
 		hashTable.add(4469, "markus");
 		assertEquals(1, hashTable.size());
 		assertTrue(hashTable.contains(4469));
 		assertEquals("markus", hashTable.get(4469));
 
+		// Add item and check
 		hashTable.add(1234, "test");
 		assertEquals(2, hashTable.size());
 		assertTrue(hashTable.contains(1234));
 		assertEquals("test", hashTable.get(1234));
 
+		// Check get with non-existent
 		assertNull(hashTable.get(0));
+
+		// New remove an item
+		hashTable.remove(1234);
+		assertFalse(hashTable.contains(1234));
+
+		// Remove non-existent
+		hashTable.remove(0);
 	}
 
 	/**
@@ -67,6 +78,8 @@ public class HashTableTests {
 			hashTable.add(i, randomStrings[i]);
 		}
 
+		assertEquals(1000, hashTable.size());
+		
 		// Check if all keys are found
 		for (int i = 0; i < 1000; i++) {
 			assertTrue(hashTable.contains(i));
@@ -76,6 +89,14 @@ public class HashTableTests {
 		for (int i = 0; i < 1000; i++) {
 			assertEquals(randomStrings[i], hashTable.get(i));
 		}
+
+		// Remove them one by one to see if the hash table scales back correctly
+		for (int i = 0; i < 1000; i++) {
+			hashTable.remove(i);
+			assertFalse(hashTable.contains(i));
+		}
+		
+		assertEquals(0, hashTable.size());
 	}
 
 	/**
