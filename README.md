@@ -8,6 +8,7 @@ markus.korbel@lyit.ie
 * Queue
 * SingleLinkedList
 * DoubleLinkedList
+* HashTable
 	
 ### Algorithms
 * LinearSearch
