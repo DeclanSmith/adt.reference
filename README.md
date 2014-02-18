@@ -11,9 +11,15 @@ markus.korbel@lyit.ie
 * HashTable
 	
 ### Algorithms
-* LinearSearch
-* BinarySearch
+* Searching
+  * LinearSearch
+  * BinarySearch
+* Sorting
+  * BubbleSort
+  * InsertionSort
+  * SelectionSort
 	
 ### Tools
+* ArraySortingCheck
 * RandomArray
 * RandomString
