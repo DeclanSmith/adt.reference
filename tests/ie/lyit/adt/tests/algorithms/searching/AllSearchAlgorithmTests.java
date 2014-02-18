@@ -13,5 +13,5 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({ BinarySearchTests.class, LinearSearchTests.class })
 public class AllSearchAlgorithmTests {
-	// Groups all data structure unit tests
+	// Groups all search algorithm unit tests
 }
