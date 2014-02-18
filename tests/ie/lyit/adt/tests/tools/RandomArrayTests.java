@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+import ie.lyit.adt.tools.ArraySortingCheck;
 import ie.lyit.adt.tools.RandomArray;
 
 import org.junit.Test;
@@ -27,12 +28,8 @@ public class RandomArrayTests {
 
 		// Checks if sorting parameter works
 		int[] sorted = RandomArray.randomIntArray(10, true, false);
-		int currentMax = Integer.MIN_VALUE;
-		for (int element : sorted) {
-			assertTrue(element > currentMax || element == Integer.MIN_VALUE);
-			currentMax = element;
-		}
-
+		assertTrue(ArraySortingCheck.isIntArraySorted(sorted));
+		
 		// Checks if noDuplicates parameter works
 		int[] noDuplicates = RandomArray.randomIntArray(1000, false, false);
 		Set<Integer> duplicatesCheck = new LinkedHashSet<Integer>();
@@ -41,12 +38,8 @@ public class RandomArrayTests {
 		}
 
 		// Test sorted but with duplicates
-		int[] sortedNoDuplicates = RandomArray.randomIntArray(1000, true, true);
-		currentMax = Integer.MIN_VALUE;
-		for (int element : sortedNoDuplicates) {
-			assertTrue(element > currentMax || element == Integer.MIN_VALUE);
-			currentMax = element;
-		}
+		int[] sortedWithDuplicates = RandomArray.randomIntArray(1000, true, true);
+		assertTrue(ArraySortingCheck.isIntArraySorted(sortedWithDuplicates));
 	}
 
 	/**
@@ -69,12 +62,7 @@ public class RandomArrayTests {
 
 		// Checks if sorting parameter works
 		String[] sorted = RandomArray.randomStringArray(10, 3, true, false);
-		String currentMax = "000";
-		for (String element : sorted) {
-			assertTrue(element.compareTo(currentMax) > 0
-					|| element.equals("000"));
-			currentMax = element;
-		}
+		assertTrue(ArraySortingCheck.isArraySorted(sorted));
 
 		// Checks if noDuplicates parameter works
 		String[] noDuplicates = RandomArray.randomStringArray(1000, 4, false,
@@ -85,14 +73,9 @@ public class RandomArrayTests {
 		}
 
 		// Test sorted but with duplicates
-		String[] sortedNoDuplicates = RandomArray.randomStringArray(1000, 4,
+		String[] sortedWithDuplicates = RandomArray.randomStringArray(1000, 4,
 				true, true);
-		currentMax = "000";
-		for (String element : sortedNoDuplicates) {
-			assertTrue(element.compareTo(currentMax) > 0
-					|| element.equals("000"));
-			currentMax = element;
-		}
+		assertTrue(ArraySortingCheck.isArraySorted(sortedWithDuplicates));
 	}
 
 	/**

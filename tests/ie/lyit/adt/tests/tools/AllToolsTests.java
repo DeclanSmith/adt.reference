@@ -11,7 +11,8 @@ import org.junit.runners.Suite.SuiteClasses;
  * 
  */
 @RunWith(Suite.class)
-@SuiteClasses({ RandomArrayTests.class, RandomStringTests.class })
+@SuiteClasses({ RandomArrayTests.class, RandomStringTests.class,
+		ArraySortingCheckTests.class })
 public class AllToolsTests {
 	// Groups all tools unit tests
 }
