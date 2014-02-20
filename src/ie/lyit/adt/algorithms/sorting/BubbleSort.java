@@ -14,7 +14,21 @@ public class BubbleSort {
 	 *            The array to sort
 	 */
 	public static void bubbleSortInt(int[] arrayToSort) {
-		// TODO implement me
+		boolean swapped;
+		do {
+			swapped = false;
+			int round = 0;
+			for (int i = 1; i < arrayToSort.length - round; i++) {
+				if (arrayToSort[i - 1] > arrayToSort[i]) {
+					int temp = arrayToSort[i - 1];
+					arrayToSort[i - 1] = arrayToSort[i];
+					arrayToSort[i] = temp;
+					swapped = true;
+				}
+			}
+			
+			round++;
+		} while (swapped);
 	}
 
 	/**
@@ -25,6 +39,20 @@ public class BubbleSort {
 	 *            The array to sort
 	 */
 	public static <T extends Comparable<T>> void bubbleSort(T[] arrayToSort) {
-		// TODO only bonus objective
+		boolean swapped;
+		do {
+			swapped = false;
+			int round = 0;
+			for (int i = 1; i < arrayToSort.length - round; i++) {
+				if (arrayToSort[i - 1].compareTo(arrayToSort[i]) > 0) {
+					T temp = arrayToSort[i - 1];
+					arrayToSort[i - 1] = arrayToSort[i];
+					arrayToSort[i] = temp;
+					swapped = true;
+				}
+			}
+			
+			round++;
+		} while (swapped);
 	}
 }

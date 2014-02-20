@@ -32,14 +32,11 @@ public class BubbleSortTests {
 	 */
 	@Test
 	public void sortStringGenericTest() {
-		// Enable this test only if you are implementing the bonus objective
-
-		// String[] randomStrings = RandomArray.randomStringArray(100, 10,
-		// false,
-		// true);
-		// assertFalse(ArraySortingCheck.isArraySorted(randomStrings));
-		// BubbleSort.bubbleSort(randomStrings);
-		// assertTrue(ArraySortingCheck.isArraySorted(randomStrings));
+		String[] randomStrings = RandomArray.randomStringArray(100, 10, false,
+				true);
+		assertFalse(ArraySortingCheck.isArraySorted(randomStrings));
+		BubbleSort.bubbleSort(randomStrings);
+		assertTrue(ArraySortingCheck.isArraySorted(randomStrings));
 	}
 
 	/**

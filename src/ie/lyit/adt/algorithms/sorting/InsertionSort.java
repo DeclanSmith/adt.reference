@@ -14,7 +14,15 @@ public class InsertionSort {
 	 *            The array to sort
 	 */
 	public static void insertionSortInt(int[] arrayToSort) {
-		// TODO implement me
+		for (int i = 1; i < arrayToSort.length; i++) {
+			int j = i;
+			while (j > 0 && arrayToSort[j - 1] > arrayToSort[j]) {
+				int temp = arrayToSort[j - 1];
+				arrayToSort[j - 1] = arrayToSort[j];
+				arrayToSort[j] = temp;
+				j--;
+			}
+		}
 	}
 
 	/**
@@ -25,6 +33,14 @@ public class InsertionSort {
 	 *            The array to sort
 	 */
 	public static <T extends Comparable<T>> void insertionSort(T[] arrayToSort) {
-		// TODO only bonus objective
+		for (int i = 1; i < arrayToSort.length; i++) {
+			int j = i;
+			while (j > 0 && arrayToSort[j - 1].compareTo(arrayToSort[j]) > 0) {
+				T temp = arrayToSort[j - 1];
+				arrayToSort[j - 1] = arrayToSort[j];
+				arrayToSort[j] = temp;
+				j--;
+			}
+		}
 	}
 }

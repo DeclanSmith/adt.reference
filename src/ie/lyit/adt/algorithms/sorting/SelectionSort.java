@@ -14,7 +14,20 @@ public class SelectionSort {
 	 *            The array to sort
 	 */
 	public static void selectionSortInt(int[] arrayToSort) {
-		// TODO implement me
+		for (int j = 0; j < arrayToSort.length - 1; j++) {
+			int iMin = j;
+			for (int i = j + 1; i < arrayToSort.length; i++) {
+				if (arrayToSort[i] < arrayToSort[iMin]) {
+					iMin = i;
+				}
+			}
+
+			if (iMin != j) {
+				int temp = arrayToSort[iMin];
+				arrayToSort[iMin] = arrayToSort[j];
+				arrayToSort[j] = temp;
+			}
+		}
 	}
 
 	/**
@@ -25,6 +38,19 @@ public class SelectionSort {
 	 *            The array to sort
 	 */
 	public static <T extends Comparable<T>> void selectionSort(T[] arrayToSort) {
-		// TODO only bonus objective
+		for (int j = 0; j < arrayToSort.length - 1; j++) {
+			int iMin = j;
+			for (int i = j + 1; i < arrayToSort.length; i++) {
+				if (arrayToSort[i].compareTo(arrayToSort[iMin]) < 0) {
+					iMin = i;
+				}
+			}
+
+			if (iMin != j) {
+				T temp = arrayToSort[iMin];
+				arrayToSort[iMin] = arrayToSort[j];
+				arrayToSort[j] = temp;
+			}
+		}
 	}
 }
