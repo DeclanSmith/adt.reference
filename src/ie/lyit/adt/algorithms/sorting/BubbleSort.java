@@ -15,9 +15,9 @@ public class BubbleSort {
 	 */
 	public static void bubbleSortInt(int[] arrayToSort) {
 		boolean swapped;
+		int round = 0;
 		do {
 			swapped = false;
-			int round = 0;
 			for (int i = 1; i < arrayToSort.length - round; i++) {
 				if (arrayToSort[i - 1] > arrayToSort[i]) {
 					int temp = arrayToSort[i - 1];
@@ -40,9 +40,9 @@ public class BubbleSort {
 	 */
 	public static <T extends Comparable<T>> void bubbleSort(T[] arrayToSort) {
 		boolean swapped;
+		int round = 0;
 		do {
 			swapped = false;
-			int round = 0;
 			for (int i = 1; i < arrayToSort.length - round; i++) {
 				if (arrayToSort[i - 1].compareTo(arrayToSort[i]) > 0) {
 					T temp = arrayToSort[i - 1];
