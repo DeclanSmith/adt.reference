@@ -19,11 +19,9 @@ public class BinarySearchTests {
 
 	/**
 	 * Tests the basic functionality of the binary search algorithm
-	 * 
-	 * @throws Exception
 	 */
 	@Test
-	public void basicIntTest() throws Exception {
+	public void basicIntTest() {
 		Random random = new Random();
 		int[] randomArray = RandomArray.randomIntArray(1000, true, false);
 		int randomIndex = random.nextInt(1000);
@@ -43,11 +41,9 @@ public class BinarySearchTests {
 
 	/**
 	 * Tests the basic functionality of the binary search algorithm
-	 * 
-	 * @throws Exception
 	 */
 	@Test
-	public void basicStringTest() throws Exception {
+	public void basicStringTest() {
 		Random random = new Random();
 		String[] randomArray = RandomArray.randomStringArray(1000, 10, true,
 				false);
@@ -101,11 +97,9 @@ public class BinarySearchTests {
 
 	/**
 	 * Tries to demonstrate the log2(n) efficiency
-	 * 
-	 * @throws Exception
 	 */
 	@Test
-	public void logarithmicTest() throws Exception {
+	public void logarithmicTest() {
 		for (int i = 0; i < 100; i++) {
 			Random random = new Random();
 			int[] randomArray = RandomArray.randomIntArray(1000, true, false);
@@ -125,5 +119,4 @@ public class BinarySearchTests {
 		// we need to test it too)
 		new BinarySearch();
 	}
-
 }

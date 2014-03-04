@@ -11,7 +11,8 @@ import org.junit.runners.Suite.SuiteClasses;
  * 
  */
 @RunWith(Suite.class)
-@SuiteClasses({ BinarySearchTests.class, LinearSearchTests.class })
+@SuiteClasses({ BinarySearchTests.class, LinearSearchTests.class,
+		RecursiveBinarySearchTests.class })
 public class AllSearchAlgorithmTests {
 	// Groups all search algorithm unit tests
 }
