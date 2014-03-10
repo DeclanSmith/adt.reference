@@ -22,10 +22,27 @@ public class RecursiveBinarySearch {
 	 */
 	public static int binaryIntSearch(int[] array, int searchFor, int iMin,
 			int iMax) {
-		// TODO implement me!!
-		return -1;
+		// Check if the array is empty
+		if (iMax < iMin) {
+			return -1;
+		}
+
+		// Calculate the midpoint to cut array in half
+		int iMid = iMin + ((iMax - iMin) / 2);
+
+		// Three way comparison
+		if (array[iMid] > searchFor) {
+			// searchFor is in lower sub-array
+			return binaryIntSearch(array, searchFor, iMin, iMid - 1);
+		} else if (array[iMid] < searchFor) {
+			// searchFor is in upper sub-array
+			return binaryIntSearch(array, searchFor, iMid + 1, iMax);
+		} else {
+			// searchFor has been found
+			return iMid;
+		}
 	}
-	
+
 	/**
 	 * Binary integer array search
 	 * 

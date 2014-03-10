@@ -31,6 +31,29 @@ public class TowerOfHanoi {
 		final String DIRECT_MOVE = "Move disk " + n + " from " + orig + " to "
 				+ dest + "\n";
 
-		return "Implement Me!";
+		// Move 0 or less discs, error!
+		if (n <= 0) {
+			throw new IllegalArgumentException(
+					"Number of discs has to be at least 1!");
+		}
+
+		// This is our base case, moving a single disc is easy
+		if (n == 1) {
+			return DIRECT_MOVE;
+		}
+
+		// Move all the smaller ones on top of us to the temporary pole (so we
+		// can move to destination)
+		String result = moveDiscs(n - 1, orig, temp, dest);
+
+		// We can now freely move to the destination pole
+		result += DIRECT_MOVE;
+
+		// Move all the smaller ones back on top of us (so that those also end
+		// up on the destination pole)
+		result += moveDiscs(n - 1, temp, dest, orig);
+
+		// This string now contains all move instructions
+		return result;
 	}
 }
