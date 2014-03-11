@@ -12,7 +12,7 @@ import org.junit.runners.Suite.SuiteClasses;
  */
 @RunWith(Suite.class)
 @SuiteClasses({ BubbleSortTests.class, SelectionSortTests.class,
-		InsertionSortTests.class })
+		InsertionSortTests.class, MergeSortTests.class, QuickSortTests.class })
 public class AllSortAlgorithmTests {
 	// Groups all sort algorithm unit tests
 }

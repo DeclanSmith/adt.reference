@@ -49,6 +49,7 @@ public class TowerOfHanoiTests {
 	 * Tests if the complexity 0(2^n -1) is correct
 	 */
 	@Test
+	@Ignore
 	public void exponentialTest() {
 		int singleMovesFormula = ((int) Math.pow(2, 1)) - 1;
 		int singleMovesCounted = TowerOfHanoi.moveDiscs(1, 'A', 'B', 'C')
