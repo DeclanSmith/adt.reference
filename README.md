@@ -18,6 +18,8 @@ markus.korbel@lyit.ie
   * BubbleSort
   * InsertionSort
   * SelectionSort
+  * MergeSort
+  * QuickSort
 	
 ### Tools
 * ArraySortingCheck
