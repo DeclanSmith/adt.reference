@@ -20,7 +20,7 @@ public class QuickSortTests {
 	 */
 	@Test
 	public void sortIntArrayTest() {
-		int[] array = RandomArray.randomIntArray(100, false, true);
+		int[] array = RandomArray.randomIntArray(100, false, false);
 		assertFalse(ArraySortingCheck.isIntArraySorted(array));
 		QuickSort.quickSortInt(array);
 		assertTrue(ArraySortingCheck.isIntArraySorted(array));
@@ -32,14 +32,11 @@ public class QuickSortTests {
 	 */
 	@Test
 	public void sortStringGenericTest() {
-		// Uncomment this only after adding the generic implementation
-
-		// String[] randomStrings = RandomArray.randomStringArray(100, 10,
-		// false,
-		// true);
-		// assertFalse(ArraySortingCheck.isArraySorted(randomStrings));
-		// QuickSort.quickSort(randomStrings);
-		// assertTrue(ArraySortingCheck.isArraySorted(randomStrings));
+		String[] randomStrings = RandomArray.randomStringArray(100, 10, false,
+				true);
+		assertFalse(ArraySortingCheck.isArraySorted(randomStrings));
+		QuickSort.quickSort(randomStrings);
+		assertTrue(ArraySortingCheck.isArraySorted(randomStrings));
 	}
 
 	/**

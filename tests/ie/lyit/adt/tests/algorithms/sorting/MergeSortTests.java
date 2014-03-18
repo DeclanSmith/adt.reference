@@ -32,14 +32,11 @@ public class MergeSortTests {
 	 */
 	@Test
 	public void sortStringGenericTest() {
-		// Uncomment this only after adding the generic implementation
-		
-		// String[] randomStrings = RandomArray.randomStringArray(100, 10,
-		// false,
-		// true);
-		// assertFalse(ArraySortingCheck.isArraySorted(randomStrings));
-		// MergeSort.mergeSort(randomStrings, String.class);
-		// assertTrue(ArraySortingCheck.isArraySorted(randomStrings));
+		String[] randomStrings = RandomArray.randomStringArray(100, 10, false,
+				true);
+		assertFalse(ArraySortingCheck.isArraySorted(randomStrings));
+		MergeSort.mergeSort(randomStrings, String.class);
+		assertTrue(ArraySortingCheck.isArraySorted(randomStrings));
 	}
 
 	/**
