@@ -13,7 +13,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({ QueueTests.class, StackTests.class,
 		SingleLinkedListTests.class, DoubleLinkedListTests.class,
-		HashTableTests.class })
+		HashTableTests.class, BinarySearchTreeTests.class })
 public class AllDataStructureTests {
 	// Groups all data structure unit tests
 }
