@@ -85,8 +85,13 @@ public class BinarySearchTree<T extends Comparable<T>> {
 	 *         the tree
 	 */
 	private BinarySearchTreeNode<T> search(BinarySearchTreeNode<T> node, T key) {
-		// TODO Implement search
-		return null;
+		if (node == null || node.key.compareTo(key) == 0) {
+			return node;
+		} else if (key.compareTo(node.key) < 0) {
+			return search(node.left, key);
+		} else {
+			return search(node.right, key);
+		}
 	}
 
 	// ==================================================
@@ -100,9 +105,17 @@ public class BinarySearchTree<T extends Comparable<T>> {
 	 *            The key to insert
 	 */
 	public void insert(T key) {
-		// TODO Check if the key is already contained?
+		if (search(key) != null) {
+			throw new IllegalStateException("No duplicate keys allowed!");
+		}
 
-		// TODO Implement insert
+		if (this.root != null) {
+			insert(this.root, key);
+		} else {
+			this.root = new BinarySearchTreeNode<T>(key, null);
+		}
+
+		this.size++;
 	}
 
 	/**
@@ -115,7 +128,19 @@ public class BinarySearchTree<T extends Comparable<T>> {
 	 *            The key to insert
 	 */
 	private void insert(BinarySearchTreeNode<T> node, T key) {
-		// TODO Implement insert
+		if (key.compareTo(node.key) < 0) {
+			if (node.left == null) {
+				node.left = new BinarySearchTreeNode<T>(key, node);
+			} else {
+				insert(node.left, key);
+			}
+		} else {
+			if (node.right == null) {
+				node.right = new BinarySearchTreeNode<T>(key, node);
+			} else {
+				insert(node.right, key);
+			}
+		}
 	}
 
 	// ==================================================
@@ -143,7 +168,32 @@ public class BinarySearchTree<T extends Comparable<T>> {
 	 *            The key to delete
 	 */
 	private void delete(BinarySearchTreeNode<T> node, T key) {
-		// TODO Implement deletion
+		if (node == null) {
+			throw new IllegalArgumentException("Key not found!");
+		}
+
+		if (key.compareTo(node.key) < 0) {
+			delete(node.left, key);
+		} else if (key.compareTo(node.key) > 0) {
+			delete(node.right, key);
+		} else {
+			// We have found the node
+			if (node.left != null && node.right != null) {
+				// Two children, do a in-order successor deletion
+				BinarySearchTreeNode<T> successor = findMinimum(node.right);
+				node.key = successor.key;
+				delete(successor, successor.key);
+			} else if (node.left != null) {
+				// Only left child, skip over us
+				replaceInParent(node, node.left);
+			} else if (node.right != null) {
+				// Only right child, skip over us
+				replaceInParent(node, node.right);
+			} else {
+				// No children, just update the parent
+				replaceInParent(node, null);
+			}
+		}
 	}
 
 	/**
@@ -154,8 +204,12 @@ public class BinarySearchTree<T extends Comparable<T>> {
 	 * @return The minimum key of the sub-tree
 	 */
 	private BinarySearchTreeNode<T> findMinimum(BinarySearchTreeNode<T> node) {
-		// TODO
-		return null;
+		BinarySearchTreeNode<T> currentNode = node;
+		while (currentNode.left != null) {
+			currentNode = currentNode.left;
+		}
+
+		return currentNode;
 	}
 
 	/**
@@ -168,7 +222,17 @@ public class BinarySearchTree<T extends Comparable<T>> {
 	 */
 	private void replaceInParent(BinarySearchTreeNode<T> node,
 			BinarySearchTreeNode<T> newNode) {
-		// TODO
+		if (node.parent != null) {
+			if (node == node.parent.left) {
+				node.parent.left = newNode;
+			} else {
+				node.parent.right = newNode;
+			}
+		}
+
+		if (newNode != null) {
+			newNode.parent = node.parent;
+		}
 	}
 
 	// ==================================================
@@ -196,7 +260,11 @@ public class BinarySearchTree<T extends Comparable<T>> {
 	 */
 	private void traverseInOrder(BinarySearchTreeNode<T> node,
 			TreeTraversalCallback<T> callback) {
-		// TODO
+		if (node != null) {
+			traverseInOrder(node.left, callback);
+			callback.traversalCallback(node);
+			traverseInOrder(node.right, callback);
+		}
 	}
 
 	// ==================================================
@@ -207,21 +275,61 @@ public class BinarySearchTree<T extends Comparable<T>> {
 	 * Balances the tree
 	 */
 	public void balance() {
-		// TODO
-	}
-
-	private void balanceTree(BinarySearchTreeNode<T> root, int min, int max,
-			List<BinarySearchTreeNode<T>> nodes) {
-		// TODO
+		List<T> keys = new ArrayList<T>();
+		traverseInOrder(new TraversalListAdder(keys));
+		this.root = null;
+		balanceTree(0, keys.size() - 1, keys);
 	}
 
 	/**
-	 * Remove all children from the specified nodes
+	 * Performs a recursive balanced tree rebuild using the sorted list of node
+	 * keys
 	 * 
-	 * @param nodes
-	 *            The nodes to process
+	 * @param min
+	 *            The current lower bound
+	 * @param max
+	 *            The current upper bound
+	 * @param keys
+	 *            The keys to re-insert
 	 */
-	private void removeChildren(List<BinarySearchTreeNode<T>> nodes) {
-		// TODO
+	private void balanceTree(int min, int max, List<T> keys) {
+		if (min <= max) {
+			int middle = (int) Math.ceil((min + max) / 2.0);
+			insert(keys.get(middle));
+			balanceTree(min, middle - 1, keys);
+			balanceTree(middle + 1, max, keys);
+		}
+	}
+
+	/**
+	 * Tree traversal callback that adds node keys into an array list
+	 * 
+	 * @author markus.korbel@lyit.ie
+	 * 
+	 */
+	private class TraversalListAdder implements TreeTraversalCallback<T> {
+		/**
+		 * The list of keys to populate
+		 */
+		private List<T> keys;
+
+		/**
+		 * Constructor
+		 * 
+		 * @param keys
+		 *            The key list
+		 */
+		public TraversalListAdder(List<T> keys) {
+			this.keys = keys;
+		}
+
+		/**
+		 * Callback method receiving node references during traversal
+		 */
+		@Override
+		public void traversalCallback(BinarySearchTreeNode<T> node) {
+			keys.add(node.key);
+		}
+
 	}
 }

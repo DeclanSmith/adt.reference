@@ -14,9 +14,12 @@ public class BinarySearchTreeNode<T extends Comparable<T>> {
 	 * 
 	 * @param key
 	 *            The key to store in the new node
+	 * @param parent
+	 *            The parent of the new node
 	 */
-	public BinarySearchTreeNode(T key) {
+	public BinarySearchTreeNode(T key, BinarySearchTreeNode<T> parent) {
 		this.key = key;
+		this.parent = parent;
 	}
 
 	/**
@@ -37,7 +40,7 @@ public class BinarySearchTreeNode<T extends Comparable<T>> {
 	/**
 	 * The parent of the node
 	 */
-	//public BinarySearchTreeNode<T> parent;
+	public BinarySearchTreeNode<T> parent;
 
 	/**
 	 * Overridden toString method (makes debugging easier)

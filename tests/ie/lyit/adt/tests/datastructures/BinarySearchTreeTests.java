@@ -25,6 +25,17 @@ public class BinarySearchTreeTests {
 		tree.insert(2);
 		tree.insert(3);
 		assertEquals(tree.getSize(), 3);
+		tree.print();
+	}
+
+	/**
+	 * Duplicate insertion test
+	 */
+	@Test(expected = IllegalStateException.class)
+	public void duplicateInsertTest() {
+		BinarySearchTree<Integer> tree = new BinarySearchTree<Integer>();
+		tree.insert(1);
+		tree.insert(1);
 	}
 
 	/**
@@ -35,6 +46,7 @@ public class BinarySearchTreeTests {
 		BinarySearchTree<Integer> tree = createDemoBalancedTree();
 		assertEquals(tree.search(99), null);
 		assertNotNull(tree.search(11));
+		System.out.println(tree.search(11));
 		assertEquals(tree.search(11).key, new Integer(11));
 	}
 
@@ -82,6 +94,24 @@ public class BinarySearchTreeTests {
 	}
 
 	/**
+	 * Tree balancing tests
+	 */
+	@Test
+	public void balanceTest() {
+		System.out.println("=====================================");
+		System.out.println("Balance traversal");
+		System.out.println("=====================================");
+		BinarySearchTree<Integer> tree = new BinarySearchTree<Integer>();
+		for (int i = 1; i <= 20; i++) {
+			tree.insert(i);
+		}
+		tree.print();
+		System.out.println("-------------------------------------");
+		tree.balance();
+		tree.print();
+	}
+
+	/**
 	 * Tree print tests
 	 */
 	@Test
@@ -101,6 +131,7 @@ public class BinarySearchTreeTests {
 		// Large balanced tree
 		tree = createDemoBalancedTree();
 		tree.print();
+		System.out.println(tree.search(8));
 	}
 
 	/**
